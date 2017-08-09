@@ -134,7 +134,8 @@ spec:
       restartPolicy: Always
       containers:
       - name: web
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
@@ -158,7 +159,8 @@ spec:
       restartPolicy: Always
       containers:
       - name: flower
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
@@ -185,7 +187,8 @@ spec:
       restartPolicy: Always
       containers:
       - name: scheduler
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         env:
@@ -208,7 +211,8 @@ spec:
       restartPolicy: Always
       containers:
       - name: worker
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         env:

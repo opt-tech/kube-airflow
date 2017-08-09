@@ -1,7 +1,7 @@
 AIRFLOW_VERSION ?= 1.8.2rc1
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
-KUBE_AIRFLOW_VERSION ?= 0.11
+KUBE_AIRFLOW_VERSION ?= 0.12
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
@@ -27,10 +27,10 @@ clean:
 
 build: $(DOCKERFILE) $(ROOTFS) $(AIRFLOW_CONF) $(ENTRYPOINT_SH) dags
 	cd $(BUILD_ROOT) && docker build -t $(IMAGE):$(TAG) . && docker tag $(IMAGE):$(TAG) $(ALIAS):$(TAG)
-	@echo "IMAGE:$(IMAGE):$(TAG) ALIAS:$(ALIAS):$(TAG) is built"
+	@echo "INOF: image:$(IMAGE):$(TAG) ALIAS:$(ALIAS):$(TAG) is built"
 
 publish:
-    @echo "to publish $(ALIAS):$(TAG)"
+	@echo "INFO: to publish $(ALIAS):$(TAG)"
 	gcloud docker -- push $(ALIAS)
 	gcloud container images list-tags $(ALIAS)
 
