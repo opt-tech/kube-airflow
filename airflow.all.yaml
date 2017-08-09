@@ -37,7 +37,7 @@ kind: Service
 metadata:
   name: web
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: airflow
     tier: web
@@ -134,7 +134,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: web
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
@@ -158,7 +158,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: flower
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
@@ -185,7 +185,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: scheduler
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         env:
@@ -208,7 +208,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: worker
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.11
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         env:

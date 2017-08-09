@@ -33,7 +33,7 @@ Create all the deployments and services for Airflow:
 
 `git clone` this repository and then just run:
 
-        make build
+        GCP_JSON_PATH=~/Documents/Archive/SpinAppTest-b4f4c9d41a6d-airflow.json make build
 
 ## Usage
 
@@ -85,6 +85,7 @@ For now, update the value for the `replicas` field of the deployment you want to
         make apply
 
 
-# Wanna help?
-
-Fork, improve and PR. ;-)
+# minkube
+```bash
+https://github.com/kubernetes/minikube/releases
+```

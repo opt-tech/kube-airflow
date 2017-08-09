@@ -1,11 +1,14 @@
-AIRFLOW_VERSION ?= 1.8.0.0
-KUBECTL_VERSION ?= 1.6.1
-KUBE_AIRFLOW_VERSION ?= 0.10
+AIRFLOW_VERSION ?= 1.8.2rc1
+# curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
+KUBECTL_VERSION ?= v1.7.3
+KUBE_AIRFLOW_VERSION ?= 0.11
+GCP_PROJECT_ID ?=$(PROJECT_ID)
+GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
-REPOSITORY ?= mumoshu/kube-airflow
+REPOSITORY ?= ming-cho/kube-airflow
 TAG ?= $(AIRFLOW_VERSION)-$(KUBECTL_VERSION)-$(KUBE_AIRFLOW_VERSION)
-IMAGE ?= $(REPOSITORY):$(TAG)
-ALIAS ?= $(REPOSITORY):$(AIRFLOW_VERSION)-$(KUBECTL_VERSION)
+IMAGE ?= $(REPOSITORY)
+ALIAS ?= gcr.io/$(GCP_PROJECT_ID)/$(IMAGE)
 
 BUILD_ROOT ?= build/$(TAG)
 DOCKERFILE ?= $(BUILD_ROOT)/Dockerfile
@@ -22,11 +25,14 @@ NAMESPACE ?= airflow-dev
 clean:
 	rm -Rf build
 
-build: $(DOCKERFILE) $(ROOTFS) $(AIRFLOW_CONF) $(ENTRYPOINT_SH)
-	cd $(BUILD_ROOT) && docker build -t $(IMAGE) . && docker tag $(IMAGE) $(ALIAS)
+build: $(DOCKERFILE) $(ROOTFS) $(AIRFLOW_CONF) $(ENTRYPOINT_SH) dags
+	cd $(BUILD_ROOT) && docker build -t $(IMAGE):$(TAG) . && docker tag $(IMAGE):$(TAG) $(ALIAS):$(TAG)
+	@echo "IMAGE:$(IMAGE):$(TAG) ALIAS:$(ALIAS):$(TAG) is built"
 
 publish:
-	docker push $(IMAGE) && docker push $(ALIAS)
+    @echo "to publish $(ALIAS):$(TAG)"
+	gcloud docker -- push $(ALIAS)
+	gcloud container images list-tags $(ALIAS)
 
 $(DOCKERFILE): $(BUILD_ROOT)
 	sed -e 's/%%KUBECTL_VERSION%%/'"$(KUBECTL_VERSION)"'/g;' -e 's/%%AIRFLOW_VERSION%%/'"$(AIRFLOW_VERSION)"'/g;' Dockerfile.template > $(DOCKERFILE)
@@ -42,6 +48,11 @@ $(AIRFLOW_CONF): $(BUILD_ROOT)
 $(ENTRYPOINT_SH): $(BUILD_ROOT)
 	mkdir -p $(shell dirname $(ENTRYPOINT_SH))
 	cp script/entrypoint.sh $(ENTRYPOINT_SH)
+
+dags: $(BUILD_ROOT)
+	cp -R ../airflow_home/dags $(BUILD_ROOT)/
+	cp -R ../airflow_home/plugins $(BUILD_ROOT)/
+	cp  $(GCP_JSON_KEY) $(BUILD_ROOT)/gcp-airflow.json
 
 $(BUILD_ROOT):
 	mkdir -p $(BUILD_ROOT)
@@ -68,7 +79,7 @@ create:
 	if ! kubectl get namespace $(NAMESPACE) >/dev/null 2>&1; then \
 	  kubectl create namespace $(NAMESPACE); \
 	fi
-	kubectl create -f airflow.all.yaml --namespace $(NAMESPACE)
+	kubectl create -f airflow.all.yaml --save-config --namespace $(NAMESPACE)
 
 apply:
 	kubectl apply -f airflow.all.yaml --namespace $(NAMESPACE)
@@ -78,6 +89,13 @@ delete:
 
 list-pods:
 	kubectl get po -a --namespace $(NAMESPACE)
+
+list-services:
+	kubectl get svc -a --namespace $(NAMESPACE)
+
+# pod_name="web-2874099158-lxgm2" make login-pod
+login-pod:
+	kubectl --namespace $(NAMESPACE) exec -it $(pod_name) -- /bin/bash
 
 browse-web:
 	minikube service web -n $(NAMESPACE)
