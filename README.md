@@ -23,6 +23,11 @@ This repository contains:
 * Based on Debian Jessie official Image [debian:jessie](https://registry.hub.docker.com/_/debian/) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [RabbitMQ](https://hub.docker.com/_/rabbitmq/) as queue
 * Following the Airflow release from [Python Package Index](https://pypi.python.org/pypi/airflow)
 
+## Create cluster
+```
+gcloud container clusters create airflow-cluster --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1
+```
+
 ## Installation
 
 Create all the deployments and services for Airflow:

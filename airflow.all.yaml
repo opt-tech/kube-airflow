@@ -200,7 +200,7 @@ spec:
           value: "/usr/local/airflow"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           value: "/usr/local/airflow/gcp-airflow.json"
-        args: ["scheduler", "-n", "5"]
+        args: ["scheduler"]
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
