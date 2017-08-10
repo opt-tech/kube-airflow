@@ -56,11 +56,10 @@ RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
-ADD  ./dags ${AIRFLOW_HOME}/dags
-ADD  ./plugins ${AIRFLOW_HOME}/plugins
+ADD  dags ${AIRFLOW_HOME}/dags
+ADD  plugins ${AIRFLOW_HOME}/plugins
 
 COPY gcp-airflow.json /usr/local/airflow/gcp-airflow.json
-ENV GOOGLE_APPLICATION_CREDENTIALS /usr/local/airflow/gcp-airflow.json
 
 RUN chmod +x /entrypoint.sh
 RUN chown -R airflow: ${AIRFLOW_HOME}

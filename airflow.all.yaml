@@ -134,11 +134,13 @@ spec:
       restartPolicy: Always
       containers:
       - name: web
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.14
         imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/usr/local/airflow/gcp-airflow.json"
         ports:
         - name: web
           containerPort: 8080
@@ -159,11 +161,13 @@ spec:
       restartPolicy: Always
       containers:
       - name: flower
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.14
         imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/usr/local/airflow/gcp-airflow.json"
         # To prevent the error: ValueError: invalid literal for int() with base 10: 'tcp://10.0.0.83:5555'
         - name: FLOWER_PORT
           value: "5555"
@@ -187,13 +191,15 @@ spec:
       restartPolicy: Always
       containers:
       - name: scheduler
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.14
         imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/usr/local/airflow/gcp-airflow.json"
         args: ["scheduler", "-n", "5"]
 ---
 apiVersion: extensions/v1beta1
@@ -211,11 +217,13 @@ spec:
       restartPolicy: Always
       containers:
       - name: worker
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.12
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.14
         imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         env:
         - name: AIRFLOW_HOME
           value: "/usr/local/airflow"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/usr/local/airflow/gcp-airflow.json"
         args: ["worker"]

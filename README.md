@@ -57,6 +57,11 @@ and services for:
 * airflow-webserver
 * airflow-flower
 
+Login into pod
+```bash
+pod_name="scheduler-1413753147-fd3q7" make login-pod
+```
+
 You can browse the Airflow dashboard via running:
 
     make browse-web
