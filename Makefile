@@ -1,7 +1,7 @@
 AIRFLOW_VERSION ?= 1.8.2rc1
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
-KUBE_AIRFLOW_VERSION ?= 0.14
+KUBE_AIRFLOW_VERSION ?= 0.15
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
@@ -15,6 +15,7 @@ DOCKERFILE ?= $(BUILD_ROOT)/Dockerfile
 ROOTFS ?= $(BUILD_ROOT)/rootfs
 AIRFLOW_CONF ?= $(BUILD_ROOT)/config/airflow.cfg
 ENTRYPOINT_SH ?= $(BUILD_ROOT)/script/entrypoint.sh
+ENTRYPOINT_DIR=$(shell dirname $(ENTRYPOINT_SH))
 DOCKER_CACHE ?= docker-cache
 SAVED_IMAGE ?= $(DOCKER_CACHE)/image-$(AIRFLOW_VERSION)-$(KUBECTL_VERSION).tar
 
@@ -46,8 +47,10 @@ $(AIRFLOW_CONF): $(BUILD_ROOT)
 	cp config/airflow.cfg $(AIRFLOW_CONF)
 
 $(ENTRYPOINT_SH): $(BUILD_ROOT)
-	mkdir -p $(shell dirname $(ENTRYPOINT_SH))
+	mkdir -p $(ENTRYPOINT_DIR)
 	cp script/entrypoint.sh $(ENTRYPOINT_SH)
+	cp script/init_meta_db.py $(ENTRYPOINT_DIR)/
+	cp -R instance $(BUILD_ROOT)/
 
 dags: $(BUILD_ROOT)
 	cp -R ../airflow_home/dags $(BUILD_ROOT)/

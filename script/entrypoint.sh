@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 CMD="airflow"
-TRY_LOOP="10"
+TRY_LOOP="20"
 POSTGRES_HOST="postgres"
 POSTGRES_PORT="5432"
 RABBITMQ_HOST="rabbitmq"
@@ -40,6 +40,9 @@ if [ "$1" = "webserver" ] || [ "$1" = "worker" ] || [ "$1" = "scheduler" ] ; the
   if [ "$1" = "webserver" ]; then
     echo "Initialize database..."
     $CMD initdb
+
+    echo ">>> Configure metadata"
+    python /init_meta_db.py --admin /instance/admin_user.json --connections /instance/connections.json --variables /instance/variables.json
   fi
   sleep 5
 fi

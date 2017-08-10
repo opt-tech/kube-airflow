@@ -54,11 +54,16 @@ RUN rm -rf \
 ENV KUBECTL_VERSION %%KUBECTL_VERSION%%
 RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl
 
+# init scripts
 COPY script/entrypoint.sh /entrypoint.sh
+COPY script/init_meta_db.py /init_meta_db.py
+ADD  instance /instance
+
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 ADD  dags ${AIRFLOW_HOME}/dags
 ADD  plugins ${AIRFLOW_HOME}/plugins
 
+# google cloud platform credential key
 COPY gcp-airflow.json /usr/local/airflow/gcp-airflow.json
 
 RUN chmod +x /entrypoint.sh
