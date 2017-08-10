@@ -69,6 +69,7 @@ COPY gcp-airflow.json /usr/local/airflow/gcp-airflow.json
 RUN chmod +x /entrypoint.sh
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
+# 8793 worker logs, 5555 flower, 8080 web
 EXPOSE 8080 5555 8793
 
 USER airflow
