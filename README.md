@@ -38,6 +38,7 @@ Create all the deployments and services for Airflow:
 
 `git clone` this repository and then just run:
 
+        export PROJECT_ID=xxxxx
         GCP_JSON_PATH=~/Documents/Archive/SpinAppTest-b4f4c9d41a6d-airflow.json make build
 
 ## Usage

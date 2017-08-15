@@ -1,7 +1,7 @@
 AIRFLOW_VERSION ?= 1.8.2rc1
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
-KUBE_AIRFLOW_VERSION ?= 0.15
+KUBE_AIRFLOW_VERSION ?= 0.21
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
@@ -26,7 +26,7 @@ NAMESPACE ?= airflow-dev
 clean:
 	rm -Rf build
 
-build: $(DOCKERFILE) $(ROOTFS) $(AIRFLOW_CONF) $(ENTRYPOINT_SH) dags
+build: $(DOCKERFILE) $(ROOTFS) $(AIRFLOW_CONF) entries dags
 	cd $(BUILD_ROOT) && docker build -t $(IMAGE):$(TAG) . && docker tag $(IMAGE):$(TAG) $(ALIAS):$(TAG)
 	@echo "INOF: image:$(IMAGE):$(TAG) ALIAS:$(ALIAS):$(TAG) is built"
 
@@ -46,7 +46,7 @@ $(AIRFLOW_CONF): $(BUILD_ROOT)
 	mkdir -p $(shell dirname $(AIRFLOW_CONF))
 	cp config/airflow.cfg $(AIRFLOW_CONF)
 
-$(ENTRYPOINT_SH): $(BUILD_ROOT)
+entries: $(BUILD_ROOT)
 	mkdir -p $(ENTRYPOINT_DIR)
 	cp script/entrypoint.sh $(ENTRYPOINT_SH)
 	cp script/init_meta_db.py $(ENTRYPOINT_DIR)/
