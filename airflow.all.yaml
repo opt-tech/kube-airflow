@@ -64,6 +64,20 @@ spec:
       targetPort: flower
       nodePort: 32081
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-subdomain
+spec:
+  clusterIP: None
+  selector:
+    app: airflow
+    tier: worker
+  ports:
+    - name: worker
+      port: 8793
+      targetPort: 8793
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -134,7 +148,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: web
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.15
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.21
         imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
@@ -161,7 +175,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: flower
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.15
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.21
         imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
@@ -191,7 +205,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: scheduler
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.15
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.21
         imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
@@ -215,9 +229,11 @@ spec:
         tier: worker
     spec:
       restartPolicy: Always
+      hostname: worker
+      subdomain: worker-subdomain
       containers:
       - name: worker
-        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.15
+        image: gcr.io/spinapptest-151310/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.21
         imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
