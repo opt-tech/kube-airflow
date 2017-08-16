@@ -33,12 +33,6 @@ RUN locale-gen
 RUN update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow
 
-RUN pip install Cython pytz pyOpenSSL ndg-httpsclient pyasn1 flask_bcrypt
-#RUN pip install apache-airflow[crypto,celery,postgres,hive,hdfs,jdbc,gcp_api]==$AIRFLOW_VERSION
-RUN pip install "git+https://github.com/apache/incubator-airflow.git@${AIRFLOW_VERSION}#egg=apache-airflow[crypto,celery,postgres,hive,hdfs,jdbc,gcp_api]"
-RUN pip install celery[redis]
-RUN pip install google-cloud-bigquery
-
 # Airflow tools for bash commands
 RUN apt-get install -y --no-install-recommends rsync openssh-client sshpass
 
@@ -53,6 +47,12 @@ RUN rm -rf \
 
 ENV KUBECTL_VERSION %%KUBECTL_VERSION%%
 RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl
+
+RUN pip install Cython pytz pyOpenSSL ndg-httpsclient pyasn1 flask_bcrypt
+#RUN pip install apache-airflow[crypto,celery,postgres,hive,hdfs,jdbc,gcp_api]==$AIRFLOW_VERSION
+RUN pip install "git+https://github.com/apache/incubator-airflow.git@${AIRFLOW_VERSION}#egg=apache-airflow[crypto,celery,postgres,hive,hdfs,jdbc,gcp_api]"
+RUN pip install celery[redis]
+RUN pip install google-cloud-bigquery slackweb
 
 # init scripts
 COPY script/entrypoint.sh /entrypoint.sh
