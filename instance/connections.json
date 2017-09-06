@@ -1,4 +1,4 @@
 {
   "postgres_default": { "conn_type": "postgres", "host": "postgres", "schema": "airflow", "login": "airflow", "password": "airflow" },
-  "gcp_default": { "conn_type": "google_cloud_platform",  "extra": "{\"extra__jdbc__drv_path\": \"\", \"extra__jdbc__drv_clsname\": \"\", \"extra__google_cloud_platform__project\": \"spinapptest-151310\", \"extra__google_cloud_platform__key_path\": \"/usr/local/airflow/gcp-airflow.json\", \"extra__google_cloud_platform__scope\": \"https://www.googleapis.com/auth/cloud-platform\"}" }
+  "gcp_default": { "conn_type": "google_cloud_platform",  "extra": "{\"extra__jdbc__drv_path\": \"\", \"extra__jdbc__drv_clsname\": \"\", \"extra__google_cloud_platform__project\": \"spinappadjust\", \"extra__google_cloud_platform__key_path\": \"/usr/local/airflow/gcp-airflow.json\", \"extra__google_cloud_platform__scope\": \"https://www.googleapis.com/auth/cloud-platform\"}" }
 }
