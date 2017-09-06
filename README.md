@@ -28,24 +28,34 @@ This repository contains:
 gcloud container clusters create airflow-cluster --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1
 ```
 
-## Installation
-
-Create all the deployments and services for Airflow:
-
-        kubectl create -f airflow.all.yaml
-
 ## Build
 
 `git clone` this repository and then just run:
 
         export PROJECT_ID=xxxxx
-        GCP_JSON_PATH=~/Documents/Archive/SpinAppTest-b4f4c9d41a6d-airflow.json make build
+        vim Makefile # modify KUBE_AIRFLOW_VERSION
+        GCP_JSON_PATH=~/Documents/Archive/SpinAppProd-c06dcd1e8e67-airflow.json make build
+
+## Publish to GCP
+
+Create all the deployments and services for Airflow:
+
+        make publish
 
 ## Usage
 
 Create all the deployments and services to run Airflow on Kubernetse:
-
-       kubectl create -f airflow.all.yaml
+       vim airflow.all.yaml
+       make create #deploy
+       make apply  #update
+       
+       make list-pods
+       make list-services
+       pod_name="web-2874099158-lxgm2" make pod-login
+       
+       
+       
+       
 
 It will create deployments for:
 
