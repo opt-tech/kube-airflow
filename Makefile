@@ -1,7 +1,7 @@
 AIRFLOW_VERSION ?= 1.8.2rc1
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
-KUBE_AIRFLOW_VERSION ?= 0.30
+KUBE_AIRFLOW_VERSION ?= 0.37
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
@@ -30,7 +30,7 @@ build: $(DOCKERFILE) $(ROOTFS) $(AIRFLOW_CONF) entries dags
 	cd $(BUILD_ROOT) && docker build -t $(IMAGE):$(TAG) . && docker tag $(IMAGE):$(TAG) $(ALIAS):$(TAG)
 	@echo "INOF: image:$(IMAGE):$(TAG) ALIAS:$(ALIAS):$(TAG) is built"
 
-publish:
+publish: build
 	@echo "INFO: to publish $(ALIAS):$(TAG)"
 	gcloud docker -- push $(ALIAS):$(TAG)
 	gcloud container images list-tags $(ALIAS)
@@ -84,11 +84,14 @@ create:
 	fi
 	kubectl create -f airflow.all.yaml --save-config --namespace $(NAMESPACE)
 
-apply:
+apply: publish
 	cat airflow.all.yaml | sed -e 's/%%APP_VERSION%%/$(KUBE_AIRFLOW_VERSION)/g' | kubectl --namespace $(NAMESPACE) apply -f -
 
-delete:
-	kubectl delete -f airflow.all.yaml --namespace $(NAMESPACE)
+deploy:
+	cat airflow.all.yaml | sed -e 's/%%APP_VERSION%%/$(KUBE_AIRFLOW_VERSION)/g' | kubectl --namespace $(NAMESPACE) apply -f -
+
+#delete:
+#	kubectl delete -f airflow.all.yaml --namespace $(NAMESPACE)
 
 list-pods:
 	kubectl get po -a --namespace $(NAMESPACE)

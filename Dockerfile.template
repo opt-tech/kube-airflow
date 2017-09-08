@@ -57,14 +57,13 @@ RUN pip install google-cloud-bigquery slackweb
 # init scripts
 COPY script/entrypoint.sh /entrypoint.sh
 COPY script/init_meta_db.py /init_meta_db.py
-ADD  instance /instance
-
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+# google cloud platform credential key
+COPY gcp-airflow.json ${AIRFLOW_HOME}/gcp-airflow.json
+
+ADD  instance /instance
 ADD  dags ${AIRFLOW_HOME}/dags
 ADD  plugins ${AIRFLOW_HOME}/plugins
-
-# google cloud platform credential key
-COPY gcp-airflow.json /usr/local/airflow/gcp-airflow.json
 
 RUN chmod +x /entrypoint.sh
 RUN chown -R airflow: ${AIRFLOW_HOME}
