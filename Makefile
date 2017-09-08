@@ -96,11 +96,11 @@ list-pods:
 list-services:
 	kubectl get svc -a --namespace $(NAMESPACE)
 
-# pod_name="web-2874099158-lxgm2" make login-pod
+# pod_name=web-2874099158-lxgm2 make login-pod
 login-pod:
 	kubectl --namespace $(NAMESPACE) exec -it $(pod_name) -- /bin/bash
 
-# pod_name="web-2874099158-lxgm2" make describe-pod
+# pod_name=web-2874099158-lxgm2 make describe-pod
 describe-pod:
 	kubectl describe pod/$(pod_name) --namespace $(NAMESPACE)
 
