@@ -28,7 +28,7 @@ This repository contains:
 gcloud container clusters create airflow-cluster --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1
 ```
 
-## create google iam service account with the following role
+## create google iam service account with the following roles
 ```
 bigquery data owner
 bigquery job user

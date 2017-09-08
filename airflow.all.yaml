@@ -155,7 +155,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: web
-        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.27
+        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-%%APP_VERSION%%
         imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
@@ -182,7 +182,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: flower
-        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.27
+        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-%%APP_VERSION%%
         imagePullPolicy: Always
         env:
         - name: AIRFLOW_HOME
@@ -212,7 +212,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: scheduler
-        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.27
+        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-%%APP_VERSION%%
         imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
@@ -240,7 +240,7 @@ spec:
       subdomain: worker-subdomain
       containers:
       - name: worker
-        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-0.27
+        image: gcr.io/spinappadjust/ming-cho/kube-airflow:1.8.2rc1-v1.7.3-%%APP_VERSION%%
         imagePullPolicy: Always
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
