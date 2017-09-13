@@ -41,7 +41,9 @@ storage object admin
 
         export PROJECT_ID=xxxxx
         vim Makefile # modify KUBE_AIRFLOW_VERSION
-        GCP_JSON_PATH=~/Documents/Archive/SpinAppProd-c06dcd1e8e67-airflow.json make build
+        GCP_JSON_PATH=~/Documents/Archive/SpinAppProd-c06dcd1e8e67-airflow.json make apply
+
+**apply** task depends on **publish** task which depend on **build** task
 
 ## Publish to GCP
 
@@ -53,17 +55,13 @@ Create all the deployments and services for Airflow:
 
 Create all the deployments and services to run Airflow on Kubernetse:
        vim airflow.all.yaml
-       make create #deploy
-       make apply  #update
+       make create # first deployment
+       make deploy #update
        
        make list-pods
        make list-services
        pod_name="web-2874099158-lxgm2" make pod-login
        
-       
-       
-       
-
 It will create deployments for:
 
 * postgres

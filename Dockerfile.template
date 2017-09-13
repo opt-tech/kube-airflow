@@ -1,7 +1,7 @@
 # VERSION 1.8.2rc1
 # AUTHOR: Mingxiang Zhang
 # DESCRIPTION: Docker image to run Airflow on Kubernetes which is capable of creating Kubernetes jobs
-# BUILD: docker build --rm -t ming-cho/kube-airflow:1.8.2rc1 .
+# BUILD: docker build --rm -t airflow-dev/kube-airflow:1.8.2rc1 .
 # SOURCE: https://github.com/ming-cho/kube-airflow
 
 FROM python:3.6-stretch

@@ -1,14 +1,15 @@
 AIRFLOW_VERSION ?= 1.8.2rc1
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
-KUBE_AIRFLOW_VERSION ?= 0.37
+KUBE_AIRFLOW_VERSION ?= 0.41
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
-REPOSITORY ?= ming-cho/kube-airflow
+REPOSITORY ?= airflow-dev/kube-airflow
 TAG ?= $(AIRFLOW_VERSION)-$(KUBECTL_VERSION)-$(KUBE_AIRFLOW_VERSION)
 IMAGE ?= $(REPOSITORY)
 ALIAS ?= gcr.io/$(GCP_PROJECT_ID)/$(IMAGE)
+REMOTE_IMAGE_PATH=${ALIAS}:${TAG}
 
 BUILD_ROOT ?= build/$(TAG)
 DOCKERFILE ?= $(BUILD_ROOT)/Dockerfile
@@ -85,10 +86,10 @@ create:
 	kubectl create -f airflow.all.yaml --save-config --namespace $(NAMESPACE)
 
 apply: publish
-	cat airflow.all.yaml | sed -e 's/%%APP_VERSION%%/$(KUBE_AIRFLOW_VERSION)/g' | kubectl --namespace $(NAMESPACE) apply -f -
+	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply -f -
 
 deploy:
-	cat airflow.all.yaml | sed -e 's/%%APP_VERSION%%/$(KUBE_AIRFLOW_VERSION)/g' | kubectl --namespace $(NAMESPACE) apply -f -
+	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply -f -
 
 #delete:
 #	kubectl delete -f airflow.all.yaml --namespace $(NAMESPACE)
