@@ -1,7 +1,7 @@
 AIRFLOW_VERSION ?= 1.8.2rc1
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
-KUBE_AIRFLOW_VERSION ?= 0.41
+KUBE_AIRFLOW_VERSION ?= $(VERSION)
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
