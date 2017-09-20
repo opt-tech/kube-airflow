@@ -1,4 +1,4 @@
-AIRFLOW_VERSION ?= 1.8.2rc1
+AIRFLOW_VERSION ?= 1.8.2
 # curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBECTL_VERSION ?= v1.7.3
 KUBE_AIRFLOW_VERSION ?= $(VERSION)
