@@ -46,8 +46,9 @@ def update_connections(connections):
             existing = session.query(models.Connection).filter_by(conn_id=conn_id).first()
             if existing:
                 existing.host = conn['host']
-                existing.port = conn['port']
                 existing.conn_type = conn['conn_type']
+
+                existing.port = conn.get('port')
                 existing.login = conn.get('login')
                 existing.password = conn.get('password')
                 existing.schema = conn.get('schema')
