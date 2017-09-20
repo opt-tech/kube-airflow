@@ -40,7 +40,8 @@ storage object admin
 `git clone` this repository and then just run:
 
         export PROJECT_ID=xxxxx
-        vim Makefile # modify KUBE_AIRFLOW_VERSION
+        # Set the version of airflow dags to replace KUBE_AIRFLOW_VERSION in Makefile
+        export VERSION="$(TZ=Asia/Tokyo date +%Y%m%dt%H%M%S)-$(git rev-parse --short HEAD)
         GCP_JSON_PATH=~/Documents/Archive/SpinAppProd-c06dcd1e8e67-airflow.json make apply
 
 **apply** task depends on **publish** task which depend on **build** task
