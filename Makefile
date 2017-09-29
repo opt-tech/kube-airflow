@@ -88,6 +88,8 @@ create:
 apply: publish
 	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply --record -f -
 
+# edit or replace
+# flower should be updated when the version of airflow is changed
 rolling-update:
 	kubectl --namespace $(NAMESPACE) set image deployment/web web=$(REMOTE_IMAGE_PATH) --record
 	kubectl --namespace $(NAMESPACE) set image deployment/worker worker=$(REMOTE_IMAGE_PATH) --record
@@ -120,7 +122,7 @@ describe-pod:
 	kubectl describe pod/$(pod_name) --namespace $(NAMESPACE)
 
 browse-web:
-	minikube service web -n $(NAMESPACE)
+	kubectl --namespace airflow-dev port-forward $(shell make list-pods | grep web- | cut -d' ' -f1) 8080:8080
 
 browse-flower:
-	minikube service flower -n $(NAMESPACE)
+	kubectl --namespace airflow-dev port-forward $(shell make list-pods | grep flower- | cut -d' ' -f1) 5555:5555
