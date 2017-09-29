@@ -25,7 +25,7 @@ This repository contains:
 
 ## Create cluster
 ```
-gcloud container clusters create airflow-cluster --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1
+gcloud container clusters create airflow-cluster --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1 --save-config
 ```
 
 ## create google iam service account with the following roles

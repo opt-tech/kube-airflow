@@ -86,10 +86,21 @@ create:
 	kubectl create -f airflow.all.yaml --save-config --namespace $(NAMESPACE)
 
 apply: publish
-	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply -f -
+	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply --record -f -
+
+rolling-update:
+	kubectl --namespace $(NAMESPACE) set image deployment/web web=$(REMOTE_IMAGE_PATH) --record
+	kubectl --namespace $(NAMESPACE) set image deployment/worker worker=$(REMOTE_IMAGE_PATH) --record
+	kubectl --namespace $(NAMESPACE) set image deployment/scheduler scheduler=$(REMOTE_IMAGE_PATH) --record
+
+#--to-revision=<revision>
+rollback:
+	kubectl --namespace $(NAMESPACE) rollout undo deployment web
+	kubectl --namespace $(NAMESPACE) rollout undo deployment worker
+	kubectl --namespace $(NAMESPACE) rollout undo deployment scheduler
 
 deploy:
-	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply -f -
+	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply --record -f -
 
 #delete:
 #	kubectl delete -f airflow.all.yaml --namespace $(NAMESPACE)
