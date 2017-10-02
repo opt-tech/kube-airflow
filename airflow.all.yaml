@@ -105,6 +105,9 @@ spec:
         ports:
         - name: postgres
           containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-data
         env:
          - name: POSTGRES_USER
            value: "airflow"
@@ -112,6 +115,13 @@ spec:
            value: "airflow"
          - name: POSTGRES_DB
            value: "airflow"
+         - name: PGDATA
+           value: "/var/lib/postgresql/data/pgdata"
+      volumes:
+      - name: postgres-data
+        gcePersistentDisk:
+          pdName: postgres-data
+          fsType: ext4
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -148,13 +158,14 @@ metadata:
   name: web
 spec:
   replicas: 1
-  minReadySeconds: 120
-  strategy:
-    # indicate which strategy we want for rolling update
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+#    replicas should be 2 for maxUnavailable=0
+#  minReadySeconds: 120
+#  strategy:
+#    # indicate which strategy we want for rolling update
+#    type: RollingUpdate
+#    rollingUpdate:
+#      maxSurge: 1
+#      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -182,13 +193,6 @@ metadata:
   name: flower
 spec:
   replicas: 1
-  minReadySeconds: 20
-  strategy:
-    # indicate which strategy we want for rolling update
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -219,13 +223,6 @@ metadata:
   name: scheduler
 spec:
   replicas: 1
-  minReadySeconds: 20
-  strategy:
-    # indicate which strategy we want for rolling update
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   template:
     metadata:
       labels:

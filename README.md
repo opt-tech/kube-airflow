@@ -25,7 +25,7 @@ This repository contains:
 
 ## Create cluster
 ```
-gcloud container clusters create airflow-cluster --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1 --save-config
+gcloud container clusters create airflow-cluster2 --enable-autorepair --machine-type=n1-standard-2 --num-nodes=1
 ```
 
 ## create google iam service account with the following roles
@@ -112,7 +112,9 @@ For now, update the value for the `replicas` field of the deployment you want to
         make apply
 
 
-# minkube
+# connect to the cluster
 ```bash
-https://github.com/kubernetes/minikube/releases
+gcloud container clusters get-credentials airflow-cluster --zone us-central1-a --project spinappadjust
+kubectl proxy
 ```
+

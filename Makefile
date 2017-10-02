@@ -5,7 +5,7 @@ KUBE_AIRFLOW_VERSION ?= $(VERSION)
 GCP_PROJECT_ID ?=$(PROJECT_ID)
 GCP_JSON_KEY ?=${GCP_JSON_PATH}
 
-REPOSITORY ?= airflow-dev/kube-airflow
+REPOSITORY ?= airflow-prod/kube-airflow
 TAG ?= $(AIRFLOW_VERSION)-$(KUBECTL_VERSION)-$(KUBE_AIRFLOW_VERSION)
 IMAGE ?= $(REPOSITORY)
 ALIAS ?= gcr.io/$(GCP_PROJECT_ID)/$(IMAGE)
@@ -20,7 +20,7 @@ ENTRYPOINT_DIR=$(shell dirname $(ENTRYPOINT_SH))
 DOCKER_CACHE ?= docker-cache
 SAVED_IMAGE ?= $(DOCKER_CACHE)/image-$(AIRFLOW_VERSION)-$(KUBECTL_VERSION).tar
 
-NAMESPACE ?= airflow-dev
+NAMESPACE ?= airflow-prod
 
 .PHONY: build clean
 
@@ -83,7 +83,10 @@ create:
 	if ! kubectl get namespace $(NAMESPACE) >/dev/null 2>&1; then \
 	  kubectl create namespace $(NAMESPACE); \
 	fi
-	kubectl create -f airflow.all.yaml --save-config --namespace $(NAMESPACE)
+	if ! gcloud compute disks describe postgres-data >/dev/null 2>&1; then \
+	  gcloud compute disks create --size 10GB postgres-data; \
+	fi
+	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl create --record --save-config --namespace $(NAMESPACE) -f -
 
 apply: publish
 	cat airflow.all.yaml | sed -e 's|%%REMOTE_IMAGE_PATH%%|$(REMOTE_IMAGE_PATH)|g' | kubectl --namespace $(NAMESPACE) apply --record -f -
@@ -122,7 +125,7 @@ describe-pod:
 	kubectl describe pod/$(pod_name) --namespace $(NAMESPACE)
 
 browse-web:
-	kubectl --namespace airflow-dev port-forward $(shell make list-pods | grep web- | cut -d' ' -f1) 8080:8080
+	kubectl --namespace $(NAMESPACE) port-forward $(shell make list-pods | grep web- | cut -d' ' -f1) 8080:8080
 
 browse-flower:
-	kubectl --namespace airflow-dev port-forward $(shell make list-pods | grep flower- | cut -d' ' -f1) 5555:5555
+	kubectl --namespace $(NAMESPACE) port-forward $(shell make list-pods | grep flower- | cut -d' ' -f1) 5555:5555
