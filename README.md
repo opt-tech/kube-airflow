@@ -42,10 +42,10 @@ storage object admin
         export PROJECT_ID=xxxxx
         # Set the version of airflow dags to replace KUBE_AIRFLOW_VERSION in Makefile
         cd ../ && export VERSION="$(TZ=Asia/Tokyo date +%Y%m%dt%H%M%S)-$(git rev-parse --short HEAD)" && echo $VERSION && cd -
-        GCP_JSON_PATH=~/Documents/Archive/SpinAppProd-c06dcd1e8e67-airflow.json make apply
+        GCP_JSON_PATH=~/Documents/Archive/GCPProjectID-c06dcd1e8e67-airflow.json make apply
         
         or 
-        GCP_JSON_PATH=~/Documents/Archive/SpinAppProd-c06dcd1e8e67-airflow.json make publish
+        GCP_JSON_PATH=~/Documents/Archive/GCPProjectID-c06dcd1e8e67-airflow.json make publish
         make rolling-update
 
 **apply** task depends on **publish** task which depend on **build** task
