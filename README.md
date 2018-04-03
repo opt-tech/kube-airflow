@@ -83,7 +83,7 @@ and services for:
 * airflow-webserver
 * airflow-flower
 
-Login into pod
+Login into pod.
 ```bash
 pod_name="scheduler-1413753147-fd3q7" make login-pod
 ```
