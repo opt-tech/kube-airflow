@@ -3,7 +3,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/mumoshu/kube-airflow.svg?maxAge=2592000)]()
 [![Docker Stars](https://img.shields.io/docker/stars/mumoshu/kube-airflow.svg?maxAge=2592000)]()
 
-kube-airflow provides a set of tools to run Airflow in a Kubernetes cluster.
+kube-airflow provides a set of tools to run Airflow in a Kubernetes cluster
 This is useful when you'd want:
 
 * Easy high availability of the Airflow scheduler
