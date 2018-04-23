@@ -43,6 +43,9 @@ if [ "$1" = "webserver" ] || [ "$1" = "worker" ] || [ "$1" = "scheduler" ] ; the
 
     echo ">>> Configure metadata"
     python /init_meta_db.py --admin /instance/admin_user.json --connections /instance/connections.json --variables /instance/variables.json
+
+    echo "initializing easy_auth..."
+    python /easy_auth.py
   fi
   sleep 5
 fi
