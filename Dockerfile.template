@@ -48,6 +48,7 @@ RUN rm -rf \
 ENV KUBECTL_VERSION %%KUBECTL_VERSION%%
 RUN curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl
 
+RUN pip install --upgrade setuptools
 RUN pip install Cython pytz pyOpenSSL ndg-httpsclient pyasn1 flask_bcrypt
 RUN pip install apache-airflow[crypto,celery,postgres,gcp_api]==$AIRFLOW_VERSION
 #RUN pip install "git+https://github.com/apache/incubator-airflow.git@${AIRFLOW_VERSION}#egg=apache-airflow[crypto,celery,postgres,gcp_api]"
