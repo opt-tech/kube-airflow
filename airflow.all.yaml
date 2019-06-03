@@ -39,14 +39,7 @@ metadata:
 spec:
   type: LoadBalancer
   loadBalancerSourceRanges:
-  - 10.0.0.0/8
-  # home ip for temp
-  - 59.166.216.164/32
-  # opt ips
-  - 202.32.143.99/32
-  - 124.32.244.99/32
-  - 124.39.122.115/32
-  - 39.110.206.88/32
+  - 0.0.0.0/0
   selector:
     app: airflow
     tier: web
